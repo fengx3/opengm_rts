@@ -232,7 +232,7 @@ pub fn sample_test(s: &Sample, testers: &[Tester]) -> HashMap<Tester, TestResult
         }
     }
 
-    return result;
+    result
 }
 
 // let line = waterline(ALPHA, samples.len());
@@ -283,7 +283,7 @@ mod tests {
         let mut samples: Vec<Sample> = Vec::new();
         let bits = 1000000;
         let mut data = vec![0u8; bits / 8];
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         let testers = get_testers(&ALL_TESTS_FUNCS, bits);
 
         for _ in 0..1000 {

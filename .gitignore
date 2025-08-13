@@ -6,3 +6,4 @@ Cargo.lock
 /dist
 /data1y
 /.vscode
+/.idea

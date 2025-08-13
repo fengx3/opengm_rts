@@ -1,5 +1,6 @@
 use std::{mem::transmute, simd::*};
 
+
 use super::{
     u1000::{u64x16_shift_elements_left, u64x16_shift_elements_right},
     u500::*,

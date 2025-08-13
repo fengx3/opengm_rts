@@ -13,12 +13,12 @@ repository = "https://github.com/opengm-libs/opengm_rts"
 
 [dependencies]
 libm = "0.2"
-rustfft = "6.3"
-realfft = "3.4"
+rustfft = "6.4"
+realfft = "3.5"
 rayon = {version = "1.10", optional = true}
 
 [dev-dependencies]
-rand = {version = "0.8"}
+rand = {version = "0.9"}
 
 
 [features]

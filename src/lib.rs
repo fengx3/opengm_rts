@@ -4,6 +4,7 @@
 #![feature(portable_simd)]
 // #![allow(unused_imports)]
 
+
 mod tester;
 mod testsuits;
 
@@ -61,14 +62,14 @@ pub struct Sample {
     // Note: for a byte x, bit 0 is (x>>7) & 1 and bit 7 is x & 1.
     b: Vec<u8>,
 
-    // Note: for a u64 x, bit 0 is (x>>63) & 1 and bit 63 is x & 1.
+    // Note: for an u64 x, bit 0 is (x>>63) & 1 and bit 63 is x & 1.
     // use Vec<u8> or Vec<u64> decided by set USE_U8 = true or false.
-    // The performace is approximatly equal.
+    // The performance is approximately equal.
     b64: Vec<u64>,
 
     bit_length: usize,
 
-    // The epsilon, use one u8 to repensent a bit.
+    // The epsilon, use one u8 to represent a bit.
     #[cfg(test)]
     e: Vec<u8>,
 
@@ -116,7 +117,7 @@ impl From<&str> for Sample {
             for chunk in e[..full_chunks].chunks_exact(8) {
                 let mut x = 0;
                 for i in chunk {
-                    x = (x << 1) | ((*i) as u8);
+                    x = (x << 1) | (*i);
                 }
                 b.push(x);
             }
@@ -139,12 +140,12 @@ impl From<&str> for Sample {
 
         let pop = popcount_u8(&b);
         Sample {
-            b: b,
-            bit_length: bit_length,
-            b64: b64,
+            b,
+            bit_length,
+            b64,
             #[cfg(test)]
-            e: e,
-            pop: pop,
+            e,
+            pop,
             patterns: Mutex::new(vec![None; MAX_OVERLAPPING_PATTERN + 1]),
             complexities: Mutex::new(vec![None;2]),
             longest_run: Mutex::new(None),
@@ -160,7 +161,7 @@ impl From<&[u8]> for Sample {
             let mut e = Vec::with_capacity(byte_slice.len() * 8);
             for c in byte_slice {
                 for j in 0..8 {
-                    e.push((c >> (7 - j)) & 1)
+                    e.push((*c >> (7 - j)) & 1)
                 }
             }
             e
@@ -224,6 +225,7 @@ impl From<Vec<u8>> for Sample {
     }
 }
 
+
 #[inline(always)]
 fn get_bit_unchecked_u64(b64: &[u64], i: usize) -> u8 {
     unsafe { (b64.get_unchecked(i / 64) >> (63 - (i & 63))) as u8 & 1 }
@@ -231,12 +233,12 @@ fn get_bit_unchecked_u64(b64: &[u64], i: usize) -> u8 {
 
 #[inline(always)]
 fn get_bit_unchecked_u8(b8: &[u8], i: usize) -> u8 {
-    unsafe { (b8.get_unchecked(i / 8) >> (8 - (i & 7))) as u8 & 1 }
+    unsafe { (b8.get_unchecked(i / 8) >> (8 - (i & 7))) & 1 }
 }
 
 impl Sample {
     pub fn new(bytes: &[u8]) -> Sample {
-        return bytes.into();
+        bytes.into()
     }
 
     #[inline(always)]
@@ -539,7 +541,7 @@ pub mod tests {
     fn test_all_time() {
         let mut samples: Vec<Sample> = Vec::new();
         let mut data = vec![0u8; 1000000 / 8];
-        let mut rng = rand::thread_rng();
+        let mut rng = rand::rng();
         for _ in 0..1000 {
             rng.fill_bytes(&mut data);
             samples.push(Sample::from(data.as_slice()));

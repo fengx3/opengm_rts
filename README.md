@@ -19,9 +19,9 @@ $ ./opengm_rts <dir/to/samples>
 ```
 
 # Performance
-1000组,每组100万比特测试数据, Macbook M1 Max上多线程5秒内完成.
+1000组,每组100万比特测试数据, Macbook M1 Max上多线程5秒内完成,内存用量60多MB.
 
-1000组,每组1亿比特测试数据, Macbook M1 Max上多线程716秒完成.
+1000组,每组1亿比特测试数据, Macbook M1 Max上多线程716秒完成,内存用量.
 
 ![performace_1m](./perf1m.jpg)
 ![performace_1y](./perf1y.jpg)

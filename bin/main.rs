@@ -1,3 +1,4 @@
+mod alloc;
 mod thread_pool;
 
 use opengm_rts::*;
@@ -10,6 +11,8 @@ use std::{
     time::Instant,
 };
 use thread_pool::ThreadPool;
+
+use crate::alloc::max_mem_used;
 
 macro_rules! pprint {
     ($v: expr, $n: expr) => {{
@@ -90,7 +93,6 @@ fn main() {
 
     let num_cpus = thread::available_parallelism().unwrap().get();
 
-
     let paths = match read_dir(data_dir) {
         Ok(path) => path,
         Err(err) => {
@@ -108,7 +110,7 @@ fn main() {
 
     // The statistics threads pool.
     let (pool, result_receiver) = ThreadPool::new(num_cpus);
-    
+
     // The reading thread
     thread::spawn(move || {
         for path in paths {
@@ -222,9 +224,13 @@ fn main() {
 
     print!("|");
     pprint!(
-        format!("Used time: {:.01} seconds", (Instant::now() - start_time).as_secs_f64()),
+        format!("Time used: {:.01} seconds", (Instant::now() - start_time).as_secs_f64()),
         COL
     );
+    println!("|");
+
+    print!("|");
+    pprint!(format!("Memory used: {:.01} MB", max_mem_used() / 1024 / 1024), COL);
     println!("|");
     print_line("-");
 }

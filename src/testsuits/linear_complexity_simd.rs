@@ -6,6 +6,8 @@ use crate::{
 
 /// 线性复杂度检测
 /// m = 500
+#[cfg_attr(target_arch="aarch64", target_feature(enable = "neon"))]
+#[cfg_attr(target_arch="x86_64", target_feature(enable = "avx2"))]
 pub(crate) fn linear_complexity_simd<T: Bits, const M: usize>(
     sample: &Sample,
 ) -> TestResult {
@@ -136,14 +138,14 @@ mod tests {
     fn test_e() {
         let sample: Sample = E.into();
         let l2 = linear_complexity_epsilon(&sample, 500);
-        let l1 = linear_complexity_simd::<U500, 500>(&sample);
+        let l1 = unsafe { linear_complexity_simd::<U500, 500>(&sample) };
         assert_eq!(l1, l2);
 
-        let l1 = linear_complexity_simd::<U1000, 1000>(&sample);
+        let l1 = unsafe { linear_complexity_simd::<U1000, 1000>(&sample) };
         let l2 = linear_complexity_epsilon(&sample, 1000);
         assert_eq!(l1, l2);
 
-        let l1 = linear_complexity_simd::<U5000, 5000>(&sample);
+        let l1 = unsafe { linear_complexity_simd::<U5000, 5000>(&sample) };
         let l2 = linear_complexity_epsilon(&sample, 5000);
         assert_eq!(l1, l2);
     }
@@ -171,7 +173,7 @@ mod bench {
 
         // m=500: 12,160,983.30 ns/iter
         b.iter(|| {
-            test::black_box(linear_complexity_simd::<U500, 500>(&sample));
+            test::black_box(unsafe { linear_complexity_simd::<U500, 500>(&sample) });
         });
     }
 
@@ -181,7 +183,7 @@ mod bench {
 
         // m=1000: 16,527,279.10
         b.iter(|| {
-            test::black_box(linear_complexity_simd::<U1000, 1000>(&sample));
+            test::black_box(unsafe { linear_complexity_simd::<U1000, 1000>(&sample) });
         });
     }
 
@@ -191,7 +193,7 @@ mod bench {
 
         // m=5000: 77,473,004.20
         b.iter(|| {
-            test::black_box(linear_complexity_simd::<U5000, 5000>(&sample));
+            test::black_box(unsafe { linear_complexity_simd::<U5000, 5000>(&sample) });
         });
     }
 
