@@ -3,7 +3,7 @@ opengm_rts is the fast randomness test suits following the GM/T 0005-2021 Random
 
 A lightweight command line executable program is provided to test for 1000 samples with one million bits each.
 
-(最快的)随机数检测函数库和工具, 遵循GM/T 0005-2021 《随机性检测规范》以及GB/T 32915-2016 《信息安全技术  二元序列随机性检测方法》(征求意见稿).
+(最快的)随机数检测函数库和工具, 遵循GM/T 0005-2021 《随机性检测规范》以及GB/T 32915-2016 《信息安全技术  二元序列随机性检测方法》.
 
 包括15个随机性测试函数以及命令行程序,支持不同比特长度的样本测试, 应用程序也可通过定制api调用实现开机检测和周期检测.
 
@@ -92,11 +92,3 @@ $ ./opengm_rts <dir/to/samples>
 
 # About
 OpenGM is the (ongoing) open-source project for the GM/T standards.
-
-# 联系
-可提供定制开发,随机数查重等.
-
-email: opengm@yeah.net
-<p>
-    <img src=./vx.jpg align="left" width=200 />
-</p>
